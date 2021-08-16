@@ -1,0 +1,5 @@
+#grad {
+  background-image: linear-gradient(to right, blue, aqua);
+  color: white;
+  text-align: center;
+}
