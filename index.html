@@ -13,11 +13,71 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"
+    ></script>
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Title</title>
   </head>
   <header><h1 id="grad">Weather Dashboard</h1></header>
   <body>
+    <main class="row justify-space-between">
+      <div
+        class="col-12 col-md-3 col-lg-3"
+        style="margin-top: 16px; margin-left: 1rem"
+      >
+        <div class>
+          <h3>Search for a City:</h3>
+          <form class="md-form mr-auto mb-4">
+            <input
+              class="form-control mr-sm-2 city-name"
+              type="text"
+              placeholder="Search"
+              aria-label="Search"
+              id="city-name"
+            />
+            <button
+              class="btn btn-outline-primary btn-block my-2"
+              type="submit"
+              id="submit-button"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+        <hr />
+        <div id="previous-search"></div>
+      </div>
+      <div class="col-12 col-md-8 col-lg-8">
+        <div class="container p-2 my-3 border">
+          <h2 id="city-name-main"></h2>
+          <ul>
+            <li class="temp" id="main-temp"></li>
+            <li class="wind" id="main-wind"></li>
+            <li class="humidity" id="main-humidity"></li>
+            <li class="uv-index" id="main-uv-index">
+              <span id="span" class="safe"></span>
+            </li>
+          </ul>
+        </div>
+        <div>
+          <h2>5-Day forcast</h2>
+          <div class="card-deck" id="forecast-display">
+            <!-- <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">Day 1</h5>
+                <p class="card-text">
+                  This is a longer card with supporting text below as a natural
+                  lead-in to additional content. This content is a little bit
+                  longer.
+                </p>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>

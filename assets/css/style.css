@@ -3,3 +3,23 @@
   color: white;
   text-align: center;
 }
+
+body {
+  min-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+ul li {
+  margin: 1rem;
+}
+
+.safe {
+  background-color: green;
+}
