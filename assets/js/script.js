@@ -33,6 +33,10 @@ function searchAPI() {
       var currentWind = data.current.wind_mph;
       var currentHumidity = data.current.humidity;
       var currentUvIndex = data.current.uv;
+      var currentIcon = data.current.condition.icon;
+      var iconImg = document.createElement("img");
+      console.log(iconImg);
+      iconImg.src = "https:" + currentIcon;
       weatherInfo = [];
       for (var i = 1; i < 6; i++) {
         var futureDate = data.forecast.forecastday[i].date;
@@ -52,6 +56,7 @@ function searchAPI() {
       console.log(weatherInfo);
       cityNameDisplay.textContent =
         locationCity + ", " + locationState + " (" + currentDate + ")";
+      cityNameDisplay.appendChild(iconImg);
       tempMain.textContent = "Current Temp: " + currentTemp + "℉";
       windMain.textContent = "Wind: " + currentWind + "mph";
       humidityMain.textContent = "Humidity: " + currentHumidity + "%";
@@ -75,11 +80,7 @@ function renderForecast() {
     var icon = document.createElement("img");
     console.log(item.icon);
     icon.src = "https:" + item.icon;
-    cardDate.appendChild(icon);
-    /*Add in icon
-    =============
-    =============
-    ============*/
+    createCardBody.appendChild(icon);
     var infoList = document.createElement("ul");
     var tempList = document.createElement("li");
     tempList.textContent = "Temp: " + item.temp + "℉";
