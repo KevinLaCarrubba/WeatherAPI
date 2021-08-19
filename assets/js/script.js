@@ -12,7 +12,7 @@ var previousSearch = [];
 var prevButton = document.querySelectorAll(".previous-button");
 
 submitBtn.addEventListener("click", searchAPI);
-
+displayPrevOnLoad();
 function searchAPI() {
   event.preventDefault();
   // var search = document.getElementById("city-name");
@@ -75,13 +75,17 @@ function saveSearch() {
   //get the local storage variable
   var savedCities = localStorage.getItem("city");
   // parse the local storage
-  var parseSavedCities = JSON.parse(savedCities);
+  var parseSavedCities = [];
+  if (savedCities) {
+    parseSavedCities = JSON.parse(savedCities);
+  }
   //push the new city into variable
   var cityName = search.value.trim();
   parseSavedCities.push(cityName);
   // previousSearch.push(cityName);
   localStorage.setItem("city", JSON.stringify(parseSavedCities));
   //add render to saveSearch
+  previousSearchDiv.innerHTML = "";
   parseSavedCities.forEach((item) => {
     var createButton = document.createElement("button");
     createButton.classList.add(
@@ -95,32 +99,40 @@ function saveSearch() {
     previousSearchDiv.appendChild(createButton);
   });
 }
-
 function renderForecast() {
   clearForecast();
   weatherInfo.forEach((item) => {
+    //create the card div and add card class
     var createCard = document.createElement("div");
     createCard.classList.add("card");
+    //create the cardbody div and add card-body class
     var createCardBody = document.createElement("div");
     createCardBody.classList.add("card-body");
+    //create the cardDate h6 and add the date content
     var cardDate = document.createElement("h6");
     cardDate.textContent = item.date;
     createCardBody.appendChild(cardDate);
+    //create and img element and add the src
     var icon = document.createElement("img");
     // console.log(item.icon);
     icon.src = "https:" + item.icon;
     createCardBody.appendChild(icon);
+    //create the info list
     var infoList = document.createElement("ul");
+    //add temp wind and humidity li plus the content
     var tempList = document.createElement("li");
     tempList.textContent = "Temp: " + item.temp + "℉";
     var windList = document.createElement("li");
     windList.textContent = "Wind: " + item.wind;
     var humidityList = document.createElement("li");
     humidityList.textContent = "Humidity: " + item.humidity + "%";
+    //append li to info list
     infoList.appendChild(tempList);
     infoList.appendChild(windList);
     infoList.appendChild(humidityList);
+    //append info list
     createCardBody.appendChild(infoList);
+
     createCard.appendChild(createCardBody);
     forcastDisplay.appendChild(createCard);
   });
@@ -130,13 +142,12 @@ function clearForecast() {
   //set the forcast display to empty
   forcastDisplay.innerHTML = "";
   search.value = "";
-  pastSearch();
 }
 
-function pastSearch() {
-  var previous = localStorage.getItem("city");
-  var previousObj = JSON.parse(previous);
-  previousObj.forEach((item) => {
+function displayPrevOnLoad() {
+  var savedCities = localStorage.getItem("city");
+  savedCitiesArray = JSON.parse(savedCities);
+  savedCitiesArray.forEach((item) => {
     var createButton = document.createElement("button");
     createButton.classList.add(
       "btn",
@@ -149,5 +160,3 @@ function pastSearch() {
     previousSearchDiv.appendChild(createButton);
   });
 }
-
-pastSearch();
