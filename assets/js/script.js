@@ -93,7 +93,7 @@ function saveSearch() {
   }
   //push the new city into variable
   var cityName = search.value.trim();
-  if (parseSavedCities.includes(cityName) === false) {
+  if (parseSavedCities.includes(cityName) === false && cityName !== null) {
     parseSavedCities.push(cityName);
   }
   // previousSearch.push(cityName);
