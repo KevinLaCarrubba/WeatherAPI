@@ -1,4 +1,5 @@
 var submitBtn = document.getElementById("submit-button");
+var clearBtn = document.getElementById("clear");
 var search = document.getElementById("city-name");
 var cityNameDisplay = document.getElementById("city-name-main");
 var tempMain = document.getElementById("main-temp");
@@ -10,15 +11,17 @@ var previousSearchDiv = document.getElementById("previous-search");
 var weatherInfo = [];
 var previousSearch = [];
 var prevButton = document.querySelectorAll(".previous-button");
+clearBtn.addEventListener("click", function (event) {
+  event.preventDefault();
+  localStorage.removeItem("city");
+  previousSearchDiv.innerHTML = "";
+});
 
 submitBtn.addEventListener("click", searchAPI);
 displayPrevOnLoad();
 function searchAPI() {
   event.preventDefault();
-  // var search = document.getElementById("city-name");
   var cityName = search.value.trim();
-
-  console.log(previousSearch);
 
   var weatherURL =
     "https://api.weatherapi.com/v1/forecast.json?key=f3dd10a5b85d43bea96181956211608&q=" +
@@ -65,15 +68,27 @@ function searchAPI() {
       humidityMain.textContent = "Humidity: " + currentHumidity + "%";
       uvIndexMain.textContent = "UV Index: " + currentUvIndex;
       if (currentUvIndex <= 2) {
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("semi-danger");
+        uvIndexMain.classList.remove("danger");
         uvIndexMain.classList.add("safe");
       }
       if (currentUvIndex >= 3 && currentUvIndex <= 5) {
+        uvIndexMain.classList.remove("semi-danger");
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("danger");
         uvIndexMain.classList.add("semi-safe");
       }
       if (currentUvIndex == 6 || currentUvIndex == 7) {
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("danger");
         uvIndexMain.classList.add("semi-danger");
       }
       if (currentUvIndex >= 8 && currentUvIndex <= 10) {
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("semi-danger");
         uvIndexMain.classList.add("danger");
       }
       saveSearch();
@@ -82,7 +97,7 @@ function searchAPI() {
       weatherObj = {};
     });
 }
-
+document.body.addEventListener("click", onRecentSearchClick);
 function saveSearch() {
   //get the local storage variable
   var savedCities = localStorage.getItem("city");
@@ -113,6 +128,7 @@ function saveSearch() {
     previousSearchDiv.appendChild(createButton);
   });
 }
+
 function renderForecast() {
   clearForecast();
   weatherInfo.forEach((item) => {
@@ -137,7 +153,7 @@ function renderForecast() {
     var tempList = document.createElement("li");
     tempList.textContent = "Temp: " + item.temp + "℉";
     var windList = document.createElement("li");
-    windList.textContent = "Wind: " + item.wind;
+    windList.textContent = "Wind: " + item.wind + "mph";
     var humidityList = document.createElement("li");
     humidityList.textContent = "Humidity: " + item.humidity + "%";
     //append li to info list
@@ -173,4 +189,87 @@ function displayPrevOnLoad() {
     createButton.textContent = item;
     previousSearchDiv.appendChild(createButton);
   });
+}
+
+function onRecentSearchClick(event) {
+  if (!event.target.classList.contains("previous-button")) {
+    return;
+  }
+
+  var cityName = event.target.innerHTML;
+
+  var weatherURL =
+    "https://api.weatherapi.com/v1/forecast.json?key=f3dd10a5b85d43bea96181956211608&q=" +
+    cityName +
+    "&days=6&aqi=no&alerts=no";
+
+  fetch(weatherURL)
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      var locationCity = data.location.name;
+      var locationState = data.location.region;
+      var currentDate = data.forecast.forecastday[0].date;
+      var currentTemp = data.current.temp_f;
+      var currentWind = data.current.wind_mph;
+      var currentHumidity = data.current.humidity;
+      var currentUvIndex = data.current.uv;
+      var currentIcon = data.current.condition.icon;
+      var iconImg = document.createElement("img");
+      console.log(iconImg);
+      iconImg.src = "https:" + currentIcon;
+      for (var i = 1; i < 6; i++) {
+        var futureDate = data.forecast.forecastday[i].date;
+        var futureTemp = data.forecast.forecastday[i].day.avgtemp_f;
+        var futureWind = data.forecast.forecastday[i].day.maxwind_mph;
+        var futureHumidity = data.forecast.forecastday[i].day.avghumidity;
+        var futureIcon = data.forecast.forecastday[i].day.condition.icon;
+        var weatherObj = {
+          date: futureDate,
+          icon: futureIcon,
+          temp: futureTemp,
+          wind: futureWind,
+          humidity: futureHumidity,
+        };
+        weatherInfo.push(weatherObj);
+      }
+      console.log(weatherInfo);
+      cityNameDisplay.textContent =
+        locationCity + ", " + locationState + " (" + currentDate + ")";
+      cityNameDisplay.appendChild(iconImg);
+      tempMain.textContent = "Current Temp: " + currentTemp + "℉";
+      windMain.textContent = "Wind: " + currentWind + "mph";
+      humidityMain.textContent = "Humidity: " + currentHumidity + "%";
+      uvIndexMain.textContent = "UV Index: " + currentUvIndex;
+      console.log(currentUvIndex);
+      if (currentUvIndex <= 2) {
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("semi-danger");
+        uvIndexMain.classList.remove("danger");
+        uvIndexMain.classList.add("safe");
+      }
+      if (currentUvIndex >= 3 && currentUvIndex <= 5) {
+        uvIndexMain.classList.remove("semi-danger");
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("danger");
+        uvIndexMain.classList.add("semi-safe");
+      }
+      if (currentUvIndex == 6 || currentUvIndex == 7) {
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("danger");
+        uvIndexMain.classList.add("semi-danger");
+      }
+      if (currentUvIndex >= 8 && currentUvIndex <= 10) {
+        uvIndexMain.classList.remove("safe");
+        uvIndexMain.classList.remove("semi-safe");
+        uvIndexMain.classList.remove("semi-danger");
+        uvIndexMain.classList.add("danger");
+      }
+      saveSearch();
+      renderForecast();
+      weatherInfo = [];
+      weatherObj = {};
+    });
 }
