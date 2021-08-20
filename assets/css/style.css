@@ -21,5 +21,25 @@ ul li {
 }
 
 .safe {
+  width: -moz-fit-content;
+  width: fit-content;
   background-color: green;
+}
+
+.semi-safe {
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: yellow;
+}
+
+.semi-danger {
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: orange;
+}
+
+.danger {
+  width: -moz-fit-content;
+  width: fit-content;
+  background-color: red;
 }

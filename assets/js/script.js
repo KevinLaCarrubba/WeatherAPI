@@ -4,7 +4,7 @@ var cityNameDisplay = document.getElementById("city-name-main");
 var tempMain = document.getElementById("main-temp");
 var windMain = document.getElementById("main-wind");
 var humidityMain = document.getElementById("main-humidity");
-var uvIndexMain = document.getElementById("span");
+var uvIndexMain = document.getElementById("main-uv-index");
 var forcastDisplay = document.getElementById("forecast-display");
 var previousSearchDiv = document.getElementById("previous-search");
 var weatherInfo = [];
@@ -64,6 +64,18 @@ function searchAPI() {
       windMain.textContent = "Wind: " + currentWind + "mph";
       humidityMain.textContent = "Humidity: " + currentHumidity + "%";
       uvIndexMain.textContent = "UV Index: " + currentUvIndex;
+      if (currentUvIndex <= 2) {
+        uvIndexMain.classList.add("safe");
+      }
+      if (currentUvIndex >= 3 && currentUvIndex <= 5) {
+        uvIndexMain.classList.add("semi-safe");
+      }
+      if (currentUvIndex == 6 || currentUvIndex == 7) {
+        uvIndexMain.classList.add("semi-danger");
+      }
+      if (currentUvIndex >= 8 && currentUvIndex <= 10) {
+        uvIndexMain.classList.add("danger");
+      }
       saveSearch();
       renderForecast();
       weatherInfo = [];
@@ -81,7 +93,9 @@ function saveSearch() {
   }
   //push the new city into variable
   var cityName = search.value.trim();
-  parseSavedCities.push(cityName);
+  if (parseSavedCities.includes(cityName) === false) {
+    parseSavedCities.push(cityName);
+  }
   // previousSearch.push(cityName);
   localStorage.setItem("city", JSON.stringify(parseSavedCities));
   //add render to saveSearch
