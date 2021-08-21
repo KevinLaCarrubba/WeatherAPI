@@ -190,8 +190,9 @@ function displayPrevOnLoad() {
     previousSearchDiv.appendChild(createButton);
   });
 }
-
+document.body.addEventListener("click", onRecentSearchClick);
 function onRecentSearchClick(event) {
+  debugger;
   if (!event.target.classList.contains("previous-button")) {
     return;
   }
